@@ -29,7 +29,7 @@ Install the dev package as hosted here on Github:
 *_If you're not setup for SSH see [Setup Git to use SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account?platform=mac&tool=webui) and [Generate SSH keys locally](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key)_
 
 ## Quick Start
-We're going to build [this script](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/quickstart.py) step-by-step below, using a [Formula JSON file](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/motivator.json) we downloaded from [Formulaic.app](http://formulaic.app). If you download both this script and the json file to your working directory, you can run them right away. You will need llamafile server running at `localhost:8080`. You can also substitute in an  OpenAI key and get going that way. We're goin to break the entire thing down step-by-step in a moment. 
+We're going to build [this script](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/quickstart.py) step-by-step below, using a [Formula JSON file](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/motivator.json) we downloaded from [Formulaic.app](http://formulaic.app). If you download both this script and the JSON file to your working directory, you can run them right away. You will need llamafile server running at `localhost:8080`. You can also substitute in an  OpenAI key and get going that way. We're goin to break the entire thing down step-by-step in a moment. 
 
 ```
 from formulaic import Formula, load_formula, OpenClient
