@@ -33,7 +33,7 @@ Import `Formula` which is what we'll use to work with our Formulas, `OpenClient`
 from formulaic import Formula, OpenClient, load_formula
 
 ```
-You'll need to Formula file to run this tutorial. All Formulas on [Formulaic.app](https://formulaic.app) JSON files that you can download to your local machine. For convenience, the one we use in this tutorial is called `motivator.json` and you can download it here. 
+You'll need to Formula file to run this tutorial. All Formulas on [Formulaic.app](https://formulaic.app) JSON files that you can download to your local machine. For convenience, the one we use in this tutorial is called `motivator.json` and you can [download it here]([url](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/motivator.json)). 
 
 - Run `load_formula()` with a single argument of the the filepath+filename to `motivator.json`. That opens the Formula's JSON file and loads it into a Python dictionary
 - Create an instance of the `Formula` class by passing it the dictionary we just created. I combined these two steps and saved my `Formula` instance as `my_formula`
@@ -161,5 +161,5 @@ and we see:
 
 That's the gist! You've parsed your first Formula and sent it off to a local language model. You can send it off to other model endpoints just as easily.  
 
-You can see the entire script we just produced here. 
+You can see [the entire script]([url](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/quickstart.py)https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/quickstart.py) we just produced here. 
 
