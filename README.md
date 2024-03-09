@@ -29,17 +29,23 @@ Install the dev package as hosted here on Github:
 *_If you're not setup for SSH see [Setup Git to use SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account?platform=mac&tool=webui) and [Generate SSH keys locally](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key)_
 
 ## Quick Start
+We're going to build [the entire script](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/quickstart.py) here step-by-step, but you can download it you just want to jump right in!
+
+### Do our imports
+
 Import `Formula` which is what we'll use to work with our Formulas, `OpenClient` a wrapper on the OpenAI library to make it seamless to send Formula prompts to any OpenAI compatible, and a helper function `load_formula` to open Formula files. 
-```
-from formulaic import Formula, OpenClient, load_formula
 
 ```
+from formulaic import Formula, OpenClient, load_formula
+```
+
+### Load and create our Formula instance
 You'll need to Formula file to run this tutorial. All Formulas on [Formulaic.app](https://formulaic.app) JSON files that you can download to your local machine. For convenience, the one we use in this tutorial is called `motivator.json` and you can [download it here](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/motivator.json). 
 
 - Run `load_formula()` with a single argument of the the filepath+filename to `motivator.json`. That opens the Formula's JSON file and loads it into a Python dictionary
 - Create an instance of the `Formula` class by passing it the dictionary we just created. I combined these two steps and saved my `Formula` instance as `my_formula`
 - Now let's print the Formula name and description.
-- 
+  
 ```
 # load our Formula
 my_formula = Formula(load_formula("motivator.json")) 
@@ -53,6 +59,7 @@ We see:
 Daily Motivator: Generates a motivational slogan based on your occasion.
 ```
 
+### Render prompts
 Our Formula is loaded correctly. Now let's call the `.render()` method. Downloaded Formula prompts often contain templating variables. When we render, we replace the template variables with values and generate prompts that are stored in the `.prompts` property. If we don't pass new values to `.render()`, it will render prompts using the Formula's default values. Render and then print again. 
 
 ```
@@ -82,6 +89,7 @@ Now we see our prompt list, available at `.prompts` contains the new occasion an
 My new prompts: ["You are a personal motivator assistant who is direct and believes that everyone can be their best. Generate a motivating slogan for the occasion of I'm scared of heights and climbing a mountain", 'Now translate that slogan into German']
 ```
 
+### Setup our model endpoing configuration
 We have prompts that are ready to be sent off to a language model. I'm going to use llamafile for this tutorial. [llamafile](https://github.com/Mozilla-Ocho/llamafile) is free, runs on your local machine, and easy to get going to run a local REST endpoint. I used the mistral 7B instruct llamafile. To get it running, download the file (5GB) and run it from the command line to start the local REST server. Please see the full [llamafile documentation](https://github.com/Mozilla-Ocho/llamafile). 
 
 
@@ -102,6 +110,7 @@ model_config = { "llamafile" :  {"url" : "http://localhost:8080/v1",
 }
 ```
 
+### Create our OpenClient and Chat
 Now we're ready to create our `OpenClient` instance, which is a class that extends `OpenAI`
 - We call `OpenClass` and pass two arguments:
 -- The first is our Formula, `my_formula`.
@@ -133,7 +142,6 @@ Assistant: Of course! The German translation of "Conquer the Mountain Within: Yo
 "Berge Innerhalb von Dir besiegen: Deine Angst ist nur ein Stufenstein zu neuen Gipfeln!"
 
 > 
-
 ```
 
 Notice that we have iterated over both of our two prompts and received two answers from the llamafile model. The cursor is awaiting our input. Let's tell it to translate to Latin and hit Return. 
@@ -145,10 +153,12 @@ Assistant: In Latin, the phrase could be:
 "Montes Intus Vincere: Timor Tuum Nec Nisi Gradus Ad Novos Culmines!"
 
 > 
-
 ```
+We see the Latin translation from the local llamafile model, and the cursor aways our next chat input. To stop the chat, just hit Return without entering any input and the loop exits. 
 
-We see the Latin translation from the local llamafile model, and the cursor aways our next chat input. To stop the chat, just hit Return without entering any input and the loop exits. Our Formula instance saved every message we sent to the model and every message the assistant sent back. You can access that at `.messages`
+
+### Access the entire message log
+Our Formula instance saved every message we sent to the model and every message the assistant sent back. You can access that at `.messages`
 
 ```
 print(client.messages)
