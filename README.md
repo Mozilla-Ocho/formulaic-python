@@ -110,7 +110,7 @@ model_config = { "llamafile" :  {"url" : "http://localhost:8080/v1",
 }
 ```
 
-### Create our OpenClient and Chat
+### Create our OpenClient and start our chat
 Now we're ready to create our `OpenClient` instance, which is a class that extends `OpenAI`
 - We call `OpenClass` and pass two arguments:
 -- The first is our Formula, `my_formula`.
