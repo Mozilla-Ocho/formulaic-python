@@ -33,7 +33,7 @@ Import `Formula` which is what we'll use to work with our Formulas, `OpenClient`
 from formulaic import Formula, OpenClient, load_formula
 
 ```
-You'll need to Formula file to run this tutorial. All Formulas on [Formulaic.app](https://formulaic.app) JSON files that you can download to your local machine. For convenience, the one we use in this tutorial is called `motivator.json` and you can [download it here]([url](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/motivator.json)). 
+You'll need to Formula file to run this tutorial. All Formulas on [Formulaic.app](https://formulaic.app) JSON files that you can download to your local machine. For convenience, the one we use in this tutorial is called `motivator.json` and you can [download it here](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/motivator.json). 
 
 - Run `load_formula()` with a single argument of the the filepath+filename to `motivator.json`. That opens the Formula's JSON file and loads it into a Python dictionary
 - Create an instance of the `Formula` class by passing it the dictionary we just created. I combined these two steps and saved my `Formula` instance as `my_formula`
@@ -81,7 +81,7 @@ Now we see our prompt list, available at `.prompts` contains the new occasion an
 My new prompts: ["You are a personal motivator assistant who is direct and believes that everyone can be their best. Generate a motivating slogan for the occasion of I'm scared of heights and climbing a mountain", 'Now translate that slogan into German']
 ```
 
-We have prompts that are ready to be sent off to a language model. I'm going to use llamafile for this tutorial. [llamafile]([url](https://github.com/Mozilla-Ocho/llamafile)) is free, runs on your local machine, and easy to get going to run a local REST endpoint. I used the mistral 7B instruct llamafile. You can download it [here](llava-v1.5-7b-q4.llamafile) (5GB) then run it from the command line to start the local REST server. Please see the [llamafile documentation]((https://github.com/Mozilla-Ocho/llamafile)). 
+We have prompts that are ready to be sent off to a language model. I'm going to use llamafile for this tutorial. [llamafile](https://github.com/Mozilla-Ocho/llamafile) is free, runs on your local machine, and easy to get going to run a local REST endpoint. I used the mistral 7B instruct llamafile. You can download it [here](llava-v1.5-7b-q4.llamafile) (5GB) then run it from the command line to start the local REST server. Please see the [llamafile documentation](https://github.com/Mozilla-Ocho/llamafile). 
 
 
 I went ahead and created a `model_config` dictionary to hold my model config variables to make it simpler. Beyond llamafile, I added placeholders for OpenAI and Anyscale. We can use the Formulaic Library to send our prompts to any language model API that supports the OpenAI format, so I included OpenAI and Anyscale. Anyscale provides hosting for many open source language models with an OpenAI compatible endpoint. You would have to create keys for OpenAI and Anyscale and substitute them in below. 
@@ -161,5 +161,5 @@ and we see:
 
 That's the gist! You've parsed your first Formula and sent it off to a local language model. You can send it off to other model endpoints just as easily.  
 
-You can see [the entire script]([url](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/quickstart.py)https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/quickstart.py) we just produced here. 
+You can see [the entire script](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/quickstart.py) we just produced here. 
 
