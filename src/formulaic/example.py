@@ -1,6 +1,4 @@
-import os, json
-from dotenv import load_dotenv
-load_dotenv()
+import json
 
 from formulaic import Formula, load_formula
 from openclient import OpenClient
