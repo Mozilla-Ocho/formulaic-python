@@ -25,13 +25,18 @@ classifiers = [
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
 ]
+dependencies = [
+    "openai>=1.0"
+]
+requires-python = ">= 3.8"
 
 [project.urls]
-homepage = "https://formulaic.app"
+homepage = "https:formulaic.app"
 repository = "https://github.com/Mozilla-Ocho/formulaic-python"
 documentation = "https://github.com/Mozilla-Ocho/formulaic-python"
 
-[project.dependencies]
-openai = ">=1.1"
-python = ">=3.8"
+
+
+
+
 
