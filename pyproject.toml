@@ -1,0 +1,37 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "formulaic"
+version = "0.1.0"
+description = "The Formulaic SDK for working with generative AI prompt Formulas."
+authors = [
+    {name = "Javaun Moradi", email = "formulaic@mozilla.com"}
+    ]
+license = "Apache-2.0"
+readme = "README.md"
+keywords = ["prompt engineering", "prompt scripts" , "LLM", "language models", "generative ai", "openai", "api", ]
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+homepage = "https://formulaic.app"
+repository = "https://github.com/Mozilla-Ocho/formulaic-python"
+documentation = "https://github.com/Mozilla-Ocho/formulaic-python"
+
+[project.dependencies]
+openai = ">=1.1"
+python = ">=3.8"
+
