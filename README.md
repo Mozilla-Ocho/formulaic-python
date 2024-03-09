@@ -1,5 +1,5 @@
 # Formulaic Python Library 
-This Python library makes it easy to work with Formulas, the open-licensed JSON scripts that contain generative AI prompts, template variables, and model configuration. You can browse existing Formulas for many popular language models at [Formulaic.app](https://formulaic.app). 
+The Formulaic library makes it easy to use Formulas inside your generative AI applications. Formulas are open-licensed JSON scripts that contain AI prompts, template variables, and model configuration.  You can browse the library of existing Formulas for many popular language models at [Formulaic.app](https://formulaic.app). 
 
 ## Installation
 This repo is currently private inside Mozilla until we release it as open source. You can download this repo to your local machine and run all of the files inside `/src/formulaic/` to take a quick spin.
@@ -29,7 +29,54 @@ Install the dev package as hosted here on Github:
 *_If you're not setup for SSH see [Setup Git to use SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account?platform=mac&tool=webui) and [Generate SSH keys locally](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key)_
 
 ## Quick Start
-We're going to build [the entire script](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/quickstart.py) here step-by-step, but you can download it you just want to jump right in!
+We're going to build [this script](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/quickstart.py) step-by-step below, using a [Formula JSON file](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/motivator.json) we downloaded from [Formulaic.app](http://formulaic.app). 
+
+```
+from formulaic import Formula, load_formula, OpenClient
+ 
+
+
+model_config = { "llamafile" :  {"url" : "http://localhost:8080/v1",
+                                 "key":"sk-no-key-required", 
+                                 "name": "LLaMA_CPP"}, 
+                  "OpenAI" :    {"url" :  "https://api.openai.com/v1",
+                                 "key": "OPENAI_KEY_GOES_HERE", 
+                                 "name": "gpt-3.5-turbo"},
+                  "mistral7b" : {"url" : "https://api.endpoints.anyscale.com/v1",
+                                 "key": "ANYSCALE_KEY_GOES_HERE", 
+                                 "name": "mistralai/Mistral-7B-Instruct-v0.1"}  
+                   
+}
+
+# load our Formula, print the Formula name: description
+my_formula = Formula(load_formula("motivator.json")) 
+print(f"{my_formula.name}: {my_formula.description}")
+
+
+# render prompts. 
+my_formula.render()
+print(f"\nMy starting prompts: {my_formula.prompts}")
+
+
+#our new variables here. 
+data = {"occasion": "I'm scared of heights and climbing a mountain", 'language': 'German'}
+
+
+# render and print our prompts
+my_formula.render(data)
+print(f"\nMy new prompts: {my_formula.prompts}")
+
+# Create an OpenClient instance for llamafile
+client = OpenClient(my_formula, model_config["llamafile"])
+
+# start our chat. True = print to terminal
+client.chat(True)
+
+# print our message log.  
+print(client.messages)
+```
+
+## Step-by-step
 
 ### Do our imports
 
