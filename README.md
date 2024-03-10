@@ -29,7 +29,7 @@ Install the dev package as hosted here on Github:
 ### Alternately: download the files and run directly
 You can also download this repo to your local machine and run all of the files inside `/src/formulaic/` to take a quick spin. **Note: the tutorial below is written for installing via `pip`.** 
 
-If you download and run all of the files inside `/src/formulaic/', use the example.py file located there as your script file. This file only works if it is in the same directory as the other three files: `motivator.json`, `formulaic.py`, and `openclient.py`. 
+If you download and run all of the files inside `/src/formulaic/`, use the [example.py](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/src/formulaic/example.py) file located there as your script file. This file only works if it is in the same directory as the other three files: `motivator.json`, `formulaic.py`, and `openclient.py`. 
 
 
 ## Quick Start
