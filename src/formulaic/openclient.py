@@ -32,6 +32,7 @@ class OpenClient(OpenAI):
         self.api_key = model["key"]
         self.model = model['name']
         self.prompts = formula.prompts
+        self.responses = []
         self.messages = []
         self.client =  OpenAI(
                         base_url= self.base_url,  
@@ -52,6 +53,7 @@ class OpenClient(OpenAI):
         # get clean answer, append it to messages, print 
         answer = completion.choices[0].message.content
         self.messages.append({"role": "assistant", "content": answer })
+        self.responses.append(answer)
 
         if printable:
             print(f"Assistant: {answer}\n")

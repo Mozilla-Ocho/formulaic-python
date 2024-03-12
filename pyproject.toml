@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "formulaic"
-version = "0.1.0"
+version = "0.1.0.1"
 description = "The official Formulaic python library for working with generative AI prompts."
 authors = [
     {name = "Javaun Moradi", email = "formulaic@mozilla.com"}

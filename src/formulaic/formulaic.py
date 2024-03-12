@@ -89,13 +89,17 @@ class Formula:
 
         # individual properties
         self.name = formula_json.get('name', '')
-        self.description = formula_json.get('description', '')  
+        self.description = formula_json.get('description', '')
+        self.created = formula_json.get('created_at', '')
+        self.updated = formula_json.get('updated_at', '')
         self.author = formula_json.get('author', '')  # ['author']
         self.source = formula_json.get ('source') #['source']
-        self.license = formula_json.get('license', {}).get('canonical_link', '') #['license']['canonical_link']
+        self.license = formula_json.get('license', {}) #['license']['canonical_link']
         self.model = formula_json.get('script', {}).get('model', {}) #['script']['model']
-        self.model_id = self.model.get('id', '') #['script']['model']['id']
+        # shortcut because model_id seems useful
+        self.model_id = self.model.get('id', '')  #['script']['model']['id']
         self.sequences = formula_json.get('script', {}).get('sequences', []) #['script']['sequences']
+
 
         
         # full variables with all attributes

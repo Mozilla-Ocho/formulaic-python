@@ -1,7 +1,8 @@
 import json
 
-# THIS SCRIPT WORKS IF YOU ARE DOWNLOADING formulaic.py and openclient.py and running this 
-#script form the same directory. 
+# THIS SCRIPT WORKS IF YOU ARE DOWNLOADING formulaic.py 
+# and openclient.py directly from repo and running this 
+# script from the same directory. 
 
 # importing as module files directly from the same directory
 from formulaic import Formula, load_formula
@@ -39,6 +40,7 @@ data = {"occasion": "I'm scared of heights and climbing a mountain", 'language':
 my_formula.render(data)
 print(f"\nMy new prompts: {my_formula.prompts}")
 
+
 # get new inputs 
 #my_formula= my_formula.inputs()
 
@@ -60,8 +62,8 @@ client = OpenClient(my_formula, model_config["llamafile"])
 #print(formula.prompts)
 
 
-
+exit()
 
 client.chat(True)
 
-print(client.messages)
+print(client.me)
