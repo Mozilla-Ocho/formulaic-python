@@ -86,7 +86,7 @@ print(client.messages)
 
 ### Do our imports
 
-Import `Formula` which is what we'll use to work with our Formulas, `OpenClient` a wrapper on the OpenAI library to make it seamless to send Formula prompts to any OpenAI compatible, and a helper function `load_formula` to open Formula files. 
+Import `Formula` which is what we'll use to work with our Formulas, `OpenClient` a wrapper on the OpenAI library to make it seamless to send Formula prompts to any OpenAI compatible API, and a helper function `load_formula` to open Formula files. 
 
 ```
 from formulaic import Formula, OpenClient, load_formula
