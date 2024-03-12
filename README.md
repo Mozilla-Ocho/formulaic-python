@@ -142,7 +142,7 @@ Now we see our prompt list, available at `.prompts` contains the new occasion an
 My new prompts: ["You are a personal motivator assistant who is direct and believes that everyone can be their best. Generate a motivating slogan for the occasion of I'm scared of heights and climbing a mountain", 'Now translate that slogan into German']
 ```
 
-### Setup our model endpoing configuration
+### Setup our model endpoint configuration
 We have prompts that are ready to be sent off to a language model. I'm going to use llamafile for this tutorial. [llamafile](https://github.com/Mozilla-Ocho/llamafile) is free, runs on your local machine, and easy to get going to run a local REST endpoint. I used the mistral 7B instruct llamafile. To get it running, download the file (5GB) and run it from the command line to start the local REST server. Please see the full [llamafile documentation](https://github.com/Mozilla-Ocho/llamafile). 
 
 
