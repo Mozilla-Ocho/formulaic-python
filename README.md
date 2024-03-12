@@ -93,7 +93,7 @@ from formulaic import Formula, OpenClient, load_formula
 ```
 
 ### Load and create our Formula instance
-You'll need to Formula file to run this tutorial. All Formulas on [Formulaic.app](https://formulaic.app) JSON files that you can download to your local machine. For convenience, the one we use in this tutorial is called `motivator.json` and you can [download it here](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/motivator.json). 
+All Formulas on [Formulaic.app](https://formulaic.app) JSON files that you can download to your local machine. We're providing one called `motivator.json` for you to use for this tutorial, which you can [download here](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/motivator.json). 
 
 - Run `load_formula()` with a single argument of the the filepath+filename to `motivator.json`. That opens the Formula's JSON file and loads it into a Python dictionary
 - Create an instance of the `Formula` class by passing it the dictionary we just created. I combined these two steps and saved my `Formula` instance as `my_formula`
