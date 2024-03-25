@@ -9,15 +9,21 @@ This repo is currently private inside Mozilla until we release it as open source
 ### (Recommended) Create a virtual environment
 Create a new directory on your local machine and open a terminal in that directory. Run this command:
 
-```python -m venv venv```
+```
+python -m venv venv
+```
 
 Note, on your machine you may have to specify python3 if "python" is not setup as a shortcut to your current version:
 
-```python3 -m venv venv```
+```
+python3 -m venv venv
+```
 
 This command creates a 'venv' virtual environment under `./venv` in the current directory. You're not ready to activate your virtual environment. Run this into the command line:
 
-```source venv/bin/activate```
+```
+source venv/bin/activate
+```
 
 ### Install the dev build of `formulaic` package
 Note: You must already be setup to use ssh with Mozilla repos in Github*. 
