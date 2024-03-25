@@ -38,7 +38,7 @@ If you download and run all of the files inside [/src/formulaic/](https://github
 We're going to build [this script](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/quickstart.py) step-by-step below, using a [Formula JSON file](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/motivator.json) we downloaded from [Formulaic.app](http://formulaic.app). If you download both this script and the JSON file to your working directory, you can run them right away. You will need a  llamafile server running at `localhost:8080`. You can also substitute in an  OpenAI key and get going that way. We're going to break the entire thing down step-by-step in a moment. 
 
 ```
-from formulaic import Formula, load_formula, OpenClient
+from formulaic_ai import Formula, load_formula, OpenClient
  
 
 
@@ -89,7 +89,7 @@ print(client.messages)
 Import `Formula` which is what we'll use to work with our Formulas, `OpenClient` a wrapper on the OpenAI library to make it seamless to send Formula prompts to any OpenAI compatible API, and a helper function `load_formula` to open Formula files. 
 
 ```
-from formulaic import Formula, OpenClient, load_formula
+from formulaic_ai import Formula, OpenClient, load_formula
 ```
 
 ### Load and create our Formula instance
