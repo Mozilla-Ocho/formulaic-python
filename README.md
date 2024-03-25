@@ -26,7 +26,6 @@ Install the dev package as hosted here on Github:
 
 ```
 pip install git+ssh://git@github.com/Mozilla-Ocho/formulaic-python.git
-
 ```
 
 *_If you're not setup for SSH see [Setup Git to use SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account?platform=mac&tool=webui) and [Generate SSH keys locally](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key)_
