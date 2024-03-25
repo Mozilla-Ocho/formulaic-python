@@ -2,6 +2,7 @@
 /ignore
 open.py
 example.py
+.DS_store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
