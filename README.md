@@ -72,14 +72,15 @@ data = {"occasion": "I'm scared of heights and climbing a mountain", 'language':
 my_formula.render(data)
 print(f"\nMy new prompts: {my_formula.prompts}")
 
+
 # Create an OpenClient instance for llamafile
-client = OpenClient(my_formula, model_config["llamafile"])
+with OpenClient(my_formula, model_config["llamafile"]) as client:
 
-# start our chat. True = print to terminal
-client.chat(True)
-
-# print our message log.  
-print(client.messages)
+    # start our chat. True = print to terminal
+    client.chat(True)
+    
+    # print our message log.  
+    print(client.messages)
 ```
 
 ## Step-by-step
@@ -168,10 +169,12 @@ Now we're ready to create our `OpenClient` instance, which is a class that exten
 - We call `OpenClass` and pass two arguments:
 -- The first is our Formula, `my_formula`.
 -- The second is a dictionary that contains valid values for the `url`, `key`, and `name` of the model endpoing we're going to use. In this case, we pass it the `llamafile` dictionary from our `model_config`.
-- We save our `OpenClass` instance to a variable called `client`
+
+We're going to call it using a `with` statement so that OpenClient's content manager will clean up for us:
 
 ```
-client = OpenClient(my_formula, model_config["llamafile"])
+with OpenClient(my_formula, model_config["llamafile"]) as client:
+
 ```
 
 We now have two options. We can just iterate over the 2 prompts we have in our Formula and await their responses. We do that by calling `.run()`. Instead, we are going to have an ongoing chat by calling `.chat()`. Both `.run` and `.chat` have a single optional argument to print out all user propmts and assistant responses to terminal. The default is `False` but we are using the command line to iteract, so we pass `True`
@@ -179,6 +182,32 @@ We now have two options. We can just iterate over the 2 prompts we have in our F
 ```
 client.chat(True)
 ```
+
+And we're also going to add `print(client.messages)` so that we can see the full list of all messages we sent to the model and the model sent back. Our whole block looks like this:
+
+```
+# Create an OpenClient instance for llamafile
+with OpenClient(my_formula, model_config["llamafile"]) as client:
+
+    # start our chat. True = print to terminal
+    client.chat(True)
+    
+    # print our message log.  
+    print(client.messages)
+
+```
+
+## Save and run the script
+
+We save it as `quickstart.py` and run it in the terminal
+
+```
+python quickstart.py
+
+```
+
+
+
 It takes a moment because we're running on our local hardware using llamafile. Here's what we see:
 
 ```
@@ -210,14 +239,11 @@ Assistant: In Latin, the phrase could be:
 We see the Latin translation from the local llamafile model, and the cursor aways our next chat input. To stop the chat, just hit Return without entering any input and the loop exits. 
 
 
-### Access the entire message log
-Our Formula instance saved every message we sent to the model and every message the assistant sent back. You can access that at `.messages`
+### See the message log printed
+Our Formula instance saved every message we sent to the model and every message the assistant sent back. This is what we accessed above by printing `client.messages`
 
-```
-print(client.messages)
-```
 
-and we see:
+and now we see:
 ```
 [{'role': 'user', 'content': "You are a personal motivator assistant who is direct and believes that everyone can be their best. Generate a motivating slogan for the occasion of I'm scared of heights and climbing a mountain"}, {'role': 'assistant', 'content': 'Absolutely, I understand that fear of heights can be a significant challenge. But remember, every mountain peak is within your reach if you believe in yourself and take it one step at a time. Here\'s a motivating slogan for you:\n\n"Conquer the Mountain Within: Your Fear is Just a Stepping Stone to New Heights!"'}, {'role': 'user', 'content': 'Now translate that slogan into German'}, {'role': 'assistant', 'content': 'Of course! The German translation of "Conquer the Mountain Within: Your Fear is Just a Stepping Stone to New Heights!" would be:\n\n"Berge Innerhalb von Dir besiegen: Deine Angst ist nur ein Stufenstein zu neuen Gipfeln!"'}, {'role': 'user', 'content': 'Now translate to Latin'}, {'role': 'assistant', 'content': 'In Latin, the phrase could be:\n\n"Montes Intus Vincere: Timor Tuum Nec Nisi Gradus Ad Novos Culmines!"'}]
 
