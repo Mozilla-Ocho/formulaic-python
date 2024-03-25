@@ -1,11 +1,5 @@
-import json
-
-# THIS SCRIPT WORKS IF YOU ARE DOWNLOADING formulaic.py and openclient.py and running this 
-#script form the same directory. 
-
-# importing as module files directly from the same directory
-from formulaic import Formula, load_formula
-from openclient import OpenClient
+from formulaic_ai import Formula, load_formula, OpenClient
+ 
 
 
 model_config = { "llamafile" :  {"url" : "http://localhost:8080/v1",
@@ -20,9 +14,8 @@ model_config = { "llamafile" :  {"url" : "http://localhost:8080/v1",
                    
 }
 
-# load our Formula
+# load our Formula, print the Formula name: description
 my_formula = Formula(load_formula("motivator.json")) 
-
 print(f"{my_formula.name}: {my_formula.description}")
 
 
@@ -31,37 +24,20 @@ my_formula.render()
 print(f"\nMy starting prompts: {my_formula.prompts}")
 
 
-
 #our new variables here. 
 data = {"occasion": "I'm scared of heights and climbing a mountain", 'language': 'German'}
+
 
 # render and print our prompts
 my_formula.render(data)
 print(f"\nMy new prompts: {my_formula.prompts}")
 
-# get new inputs 
-#my_formula= my_formula.inputs()
 
+# Create an OpenClient instance for llamafile
+with OpenClient(my_formula, model_config["llamafile"]) as client:
 
-#my_formula.render(my_formula.inputs())
-
-#print(f"My new prompts: {my_formula.prompts}")
-
-
-client = OpenClient(my_formula, model_config["llamafile"])
-#print(model_config["OpenAI"])
-
-#print(formula.model)
-
-
-
-
-
-#print(formula.prompts)
-
-
-
-
-client.chat(True)
-
-print(client.messages)
+    # start our chat. True = print to terminal
+    client.chat(True)
+    
+    # print our message log.  
+    print(client.messages)
