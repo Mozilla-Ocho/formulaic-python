@@ -15,8 +15,6 @@ recursively by both run() and chat()
 run() method loops through each prompt in a Formula, awaits server response,
 then sends next prompt until complete. It tops once Formula prompts are all sent
 
-
-
 chat() method loops through all Formula prompts and then continues with a simple 
 CLI chat to continue the chat. If you hit "enter" without inputing data the chat ends
 
@@ -73,4 +71,13 @@ class OpenClient(OpenAI):
             next_message = input("> ")
             if next_message:
                 self.send_message(next_message, printable, direct=True)
-        
+
+
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.responses.clear()
+        self.messages.clear()
+        self.prompts.clear()
+        print("Exiting OpenClient, clearing state.")    
