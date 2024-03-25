@@ -33,7 +33,7 @@ requires-python = ">= 3.8"
 [project.urls]
 homepage = "https:formulaic.app"
 repository = "https://github.com/Mozilla-Ocho/formulaic-python"
-documentation = "https://github.com/Mozilla-Ocho/formulaic-python"
+documentation = "https://docs.formulaic.app"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/formulaic_ai"]
