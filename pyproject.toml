@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "formulaic-ai"
-version = "0.1.0.2"
+version = "0.1.0.3"
 description = "The official Formulaic python library for working with generative AI prompts."
 authors = [
     {name = "Javaun Moradi", email = "formulaic@mozilla.com"}
@@ -36,7 +36,7 @@ repository = "https://github.com/Mozilla-Ocho/formulaic-python"
 documentation = "https://github.com/Mozilla-Ocho/formulaic-python"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/formulaic"]
+packages = ["src/formulaic_ai"]
 
 
 
