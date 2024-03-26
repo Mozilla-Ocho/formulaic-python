@@ -45,7 +45,7 @@ If you download and run all of the files inside [/src/formulaic/](https://github
 ## Quick Start
 We're going to build [this script](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/quickstart.py) step-by-step below, using a [Formula JSON file](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/motivator.json) we downloaded from [Formulaic.app](http://formulaic.app). If you download both this script and the JSON file to your working directory, you can run them right away. You will need a  llamafile server running at `localhost:8080`. You can also substitute in an  OpenAI key and get going that way. We're going to break the entire thing down step-by-step in a moment. 
 
-```
+```python
 from formulaic_ai import Formula, load_formula, OpenClient
  
 
@@ -108,7 +108,7 @@ All Formulas on [Formulaic.app](https://formulaic.app) JSON files that you can d
 - Create an instance of the `Formula` class by passing it the dictionary we just created. I combined these two steps and saved my `Formula` instance as `my_formula`
 - Now let's print the Formula name and description.
   
-```
+```python
 # load our Formula
 my_formula = Formula(load_formula("motivator.json")) 
 
@@ -124,7 +124,7 @@ Daily Motivator: Generates a motivational slogan based on your occasion.
 ### Render prompts
 Our Formula is loaded correctly. Now let's call the `.render()` method. Downloaded Formula prompts often contain templating variables. When we render, we replace the template variables with values and generate prompts that are stored in the `.prompts` property. If we don't pass new values to `.render()`, it will render prompts using the Formula's default values. Render and then print again. 
 
-```
+```python
 # render prompts. 
 my_formula.render()
 print(f"\nMy starting prompts: {my_formula.prompts}")
@@ -137,7 +137,7 @@ My starting prompts: ['You are a personal motivator assistant who is direct and 
 Our prompts are in a Python list. The occasion is "first day of a new job" and the "French". 
 
 Now let's pass in new data, re-render our prompts, and print again.
-```
+```python
 #our new variables here. 
 data = {"occasion": "I'm scared of heights and climbing a mountain", 'language': 'German'}
 
@@ -157,7 +157,7 @@ We have prompts that are ready to be sent off to a language model. I'm going to 
 
 I went ahead and created a `model_config` dictionary to hold my model config variables to make it simpler. Beyond llamafile, I added placeholders for OpenAI and Anyscale. We can use the Formulaic Library to send our prompts to any language model API that supports the OpenAI format, so I included OpenAI and Anyscale. Anyscale provides hosting for many open source language models with an OpenAI compatible endpoint. You would have to create keys for OpenAI and Anyscale and substitute them in below. 
 
-```
+```python
 
 model_config = { "llamafile" :  {"url" : "http://localhost:8080/v1",
                                  "key":"sk-no-key-required", 
@@ -180,20 +180,20 @@ Now we're ready to create our `OpenClient` instance, which is a class that exten
 
 We're going to call it using a `with` statement so that OpenClient's content manager will clean up for us:
 
-```
+```python
 with OpenClient(my_formula, model_config["llamafile"]) as client:
 
 ```
 
 We now have two options. We can just iterate over the 2 prompts we have in our Formula and await their responses. We do that by calling `.run()`. Instead, we are going to have an ongoing chat by calling `.chat()`. Both `.run` and `.chat` have a single optional argument to print out all user propmts and assistant responses to terminal. The default is `False` but we are using the command line to iteract, so we pass `True`
 
-```
+```python
 client.chat(True)
 ```
 
 And we're also going to add `print(client.messages)` so that we can see the full list of all messages we sent to the model and the model sent back. Our whole block looks like this:
 
-```
+```python
 # Create an OpenClient instance for llamafile
 with OpenClient(my_formula, model_config["llamafile"]) as client:
 
