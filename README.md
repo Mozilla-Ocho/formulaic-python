@@ -7,7 +7,7 @@ The Formulaic library makes it easy to use Formulas inside your generative AI ap
 
 Install the Formulaic Python library
 
-```
+```python
 pip install formulaic-ai
 ```
 
@@ -66,7 +66,7 @@ with OpenClient(my_formula, model_config["llamafile"]) as client:
 
 Import `Formula` which is what we'll use to work with our Formulas, `OpenClient` a wrapper on the OpenAI library to make it seamless to send Formula prompts to any OpenAI compatible API, and a helper function `load_formula` to open Formula files. 
 
-```
+```python
 from formulaic_ai import Formula, OpenClient, load_formula
 ```
 
