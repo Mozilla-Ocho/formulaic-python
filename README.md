@@ -1,5 +1,5 @@
 # Formulaic Python Library 
-_**NOTE: This is a project in active development. It is not stable and changes frequently. It is not ready for production use.**_
+_**NOTE: This is a project in active development and changes frequently. It is not yet intended for production use.**_
 
 The Formulaic library makes it easy to use Formulas inside your generative AI applications. Formulas are open-licensed JSON scripts that contain AI prompts, template variables, and model configuration.  You can browse the library of existing Formulas for many popular language models at [Formulaic.app](https://formulaic.app). 
 
