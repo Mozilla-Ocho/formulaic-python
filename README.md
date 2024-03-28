@@ -4,43 +4,12 @@ _**NOTE: This is a project in active development. It is not stable and changes f
 The Formulaic library makes it easy to use Formulas inside your generative AI applications. Formulas are open-licensed JSON scripts that contain AI prompts, template variables, and model configuration.  You can browse the library of existing Formulas for many popular language models at [Formulaic.app](https://formulaic.app). 
 
 ## Installation
-This repo is currently private inside Mozilla until we release it as open source. 
 
-### (Recommended) Create a virtual environment
-Create a new directory on your local machine and open a terminal in that directory. Run this command:
+Install the Formulaic Python library
 
 ```
-python -m venv venv
+pip install formulaic-ai
 ```
-
-Note, on your machine you may have to specify python3 if "python" is not setup as a shortcut to your current version:
-
-```
-python3 -m venv venv
-```
-
-This command creates a 'venv' virtual environment under `./venv` in the current directory. You're not ready to activate your virtual environment. Run this into the command line:
-
-```
-source venv/bin/activate
-```
-
-### Install the dev build of `formulaic` package
-Note: You must already be setup to use ssh with Mozilla repos in Github*. 
-
-Install the dev package as hosted here on Github:
-
-```
-pip install git+ssh://git@github.com/Mozilla-Ocho/formulaic-python.git
-```
-
-*_If you're not setup for SSH see [Setup Git to use SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account?platform=mac&tool=webui) and [Generate SSH keys locally](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key)_
-
-### Alternately: download the files and run directly
-You can also download this repo to your local machine and run all of the files inside `/src/formulaic/` to take a quick spin. **Note: the tutorial below is written for installing via `pip`.** 
-
-If you download and run all of the files inside [/src/formulaic/](https://github.com/Mozilla-Ocho/formulaic-python/tree/main/src/formulaic), use the [example.py](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/src/formulaic/example.py) file located there as your script file. This file only works if it is in the same directory as the other three files: `motivator.json`, `formulaic.py`, and `openclient.py`. 
-
 
 ## Quick Start
 We're going to build [this script](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/quickstart.py) step-by-step below, using a [Formula JSON file](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/motivator.json) we downloaded from [Formulaic.app](http://formulaic.app). If you download both this script and the JSON file to your working directory, you can run them right away. You will need a  llamafile server running at `localhost:8080`. You can also substitute in an  OpenAI key and get going that way. We're going to break the entire thing down step-by-step in a moment. 
