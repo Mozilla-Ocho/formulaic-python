@@ -1,7 +1,7 @@
 # Formulaic Python Library 
 _**NOTE: This is a project in active development and changes frequently. It is not yet intended for production use.**_
 
-The Formulaic library makes it easy to use Formulas inside your generative AI applications. Formulas are open-licensed JSON scripts that contain AI prompts, template variables, and model configuration.  You can browse the library of existing Formulas for many popular language models at [Formulaic.app](https://formulaic.app). 
+The [Formulaic Python library](https://github.com/Mozilla-Ocho/formulaic-python) makes it easy to use Formulas inside your generative AI applications. Formulas are open-licensed JSON scripts that contain AI prompts, template variables, and model configuration.  You can browse the library of existing Formulas for many popular language models at [Formulaic.app](https://formulaic.app). 
 
 ## Installation
 
@@ -101,7 +101,9 @@ print(f"\nMy starting prompts: {my_formula.prompts}")
 Printed in the terminal we see we see: 
 
 ```
-My starting prompts: ['You are a personal motivator assistant who is direct and believes that everyone can be their best. Generate a motivating slogan for the occasion of first day of a new job', 'Now translate that slogan into French ']
+My starting prompts: ['You are a personal motivator assistant who is direct and 
+believes that everyone can be their best. Generate a motivating slogan for the 
+occasion of first day of a new job', 'Now translate that slogan into French ']
 ```
 Our prompts are in a Python list. The occasion is "first day of a new job" and the "French". 
 
@@ -117,14 +119,17 @@ print(f"\nMy new prompts: {my_formula.prompts}")
 Now we see our prompt list, available at `.prompts` contains the new occasion and new translation language.
 
 ```
-My new prompts: ["You are a personal motivator assistant who is direct and believes that everyone can be their best. Generate a motivating slogan for the occasion of I'm scared of heights and climbing a mountain", 'Now translate that slogan into German']
+My new prompts: ["You are a personal motivator assistant who is direct and 
+believes that everyone can be their best. Generate a motivating slogan for 
+the occasion of I'm scared of heights and climbing a mountain", 'Now 
+translate that slogan into German']
 ```
 
 ### Setup our model endpoint configuration
-We have prompts that are ready to be sent off to a language model. I'm going to use llamafile for this tutorial. [llamafile](https://github.com/Mozilla-Ocho/llamafile) is free, runs on your local machine, and easy to get going to run a local REST endpoint. I used the mistral 7B instruct llamafile. To get it running, download the file (5GB) and run it from the command line to start the local REST server. Please see the full [llamafile documentation](https://github.com/Mozilla-Ocho/llamafile). 
+We have prompts that are ready to be sent off to a language model. I'm going to use llamafile for this tutorial. [llamafile](https://github.com/Mozilla-Ocho/llamafile) is free, runs on your local machine, and makes it easy to deploy a local API endpoint. I chose the [mistral 7B instruct llamafile](https://huggingface.co/jartine/Mistral-7B-Instruct-v0.2-llamafile). To get it running, download the file (5GB) and run it from the command line to start the local HTTP server. Please see the full [llamafile documentation](https://github.com/Mozilla-Ocho/llamafile) for instructions on how to download and get started. 
 
 
-I went ahead and created a `model_config` dictionary to hold my model config variables to make it simpler. Beyond llamafile, I added placeholders for OpenAI and Anyscale. We can use the Formulaic Library to send our prompts to any language model API that supports the OpenAI format, so I included OpenAI and Anyscale. Anyscale provides hosting for many open source language models with an OpenAI compatible endpoint. You would have to create keys for OpenAI and Anyscale and substitute them in below. 
+I went ahead and created a `model_config` dictionary to hold my model config variables to make it simpler. We can use the Formulaic Library to send our prompts to any language model API that supports the OpenAI format, so I included OpenAI and Anyscale. Anyscale provides hosting for many open source language models with an OpenAI compatible endpoint. You would have to create keys for OpenAI and Anyscale and substitute them in below. 
 
 ```python
 
@@ -142,12 +147,13 @@ model_config = { "llamafile" :  {"url" : "http://localhost:8080/v1",
 ```
 
 ### Create our OpenClient and start our chat
-Now we're ready to create our `OpenClient` instance, which is a class that extends `OpenAI`
-- We call `OpenClass` and pass two arguments:
--- The first is our Formula, `my_formula`.
--- The second is a dictionary that contains valid values for the `url`, `key`, and `name` of the model endpoing we're going to use. In this case, we pass it the `llamafile` dictionary from our `model_config`.
+Now we're ready to create our `OpenClient` instance, which is a class that extends `OpenAI`. 
 
-We're going to call it using a `with` statement so that OpenClient's content manager will clean up for us:
+* We call `OpenClass` and pass two arguments:
+    - The first is our Formula, `my_formula`.
+    -  The second is a dictionary that contains valid values for the `url`, `key`, and `name` of the model endpoing we're going to use. In this case, we pass it the `llamafile` dictionary from our `model_config`.
+
+We're going to call it using a `with` statement so that OpenClient's context manager will clean up for us:
 
 ```python
 with OpenClient(my_formula, model_config["llamafile"]) as client:
@@ -188,17 +194,23 @@ python quickstart.py
 It takes a moment because we're running on our local hardware using llamafile. Here's what we see:
 
 ```
-User: You are a personal motivator assistant who is direct and believes that everyone can be their best. Generate a motivating slogan for the occasion of I'm scared of heights and climbing a mountain
+User: You are a personal motivator assistant who is direct and believes that 
+everyone can be their best. Generate a motivating slogan for the occasion of 
+I'm scared of heights and climbing a mountain
 
-Assistant: Absolutely, I understand that fear of heights can be a significant challenge. But remember, every mountain peak is within your reach if you believe in yourself and take it one step at a time. Here's a motivating slogan for you:
+Assistant: Absolutely, I understand that fear of heights can be a significant 
+challenge. But remember, every mountain peak is within your reach if you believe 
+in yourself and take it one step at a time. Here's a motivating slogan for you:
 
 "Conquer the Mountain Within: Your Fear is Just a Stepping Stone to New Heights!"
 
 User: Now translate that slogan into German
 
-Assistant: Of course! The German translation of "Conquer the Mountain Within: Your Fear is Just a Stepping Stone to New Heights!" would be:
+Assistant: Of course! The German translation of "Conquer the Mountain Within: 
+Your Fear is Just a Stepping Stone to New Heights!" would be:
 
-"Berge Innerhalb von Dir besiegen: Deine Angst ist nur ein Stufenstein zu neuen Gipfeln!"
+"Berge Innerhalb von Dir besiegen: Deine Angst ist nur ein Stufenstein zu 
+neuen Gipfeln!"
 
 > 
 ```
@@ -222,7 +234,20 @@ Our Formula instance saved every message we sent to the model and every message 
 
 and now we see:
 ```
-[{'role': 'user', 'content': "You are a personal motivator assistant who is direct and believes that everyone can be their best. Generate a motivating slogan for the occasion of I'm scared of heights and climbing a mountain"}, {'role': 'assistant', 'content': 'Absolutely, I understand that fear of heights can be a significant challenge. But remember, every mountain peak is within your reach if you believe in yourself and take it one step at a time. Here\'s a motivating slogan for you:\n\n"Conquer the Mountain Within: Your Fear is Just a Stepping Stone to New Heights!"'}, {'role': 'user', 'content': 'Now translate that slogan into German'}, {'role': 'assistant', 'content': 'Of course! The German translation of "Conquer the Mountain Within: Your Fear is Just a Stepping Stone to New Heights!" would be:\n\n"Berge Innerhalb von Dir besiegen: Deine Angst ist nur ein Stufenstein zu neuen Gipfeln!"'}, {'role': 'user', 'content': 'Now translate to Latin'}, {'role': 'assistant', 'content': 'In Latin, the phrase could be:\n\n"Montes Intus Vincere: Timor Tuum Nec Nisi Gradus Ad Novos Culmines!"'}]
+[{'role': 'user', 'content': "You are a personal motivator assistant who is 
+direct and believes that everyone can be their best. Generate a motivating 
+slogan for the occasion of I'm scared of heights and climbing a mountain"}, 
+{'role': 'assistant', 'content': 'Absolutely, I understand that fear of heights 
+can be a significant challenge. But remember, every mountain peak is within your 
+reach if you believe in yourself and take it one step at a time. Here\'s a 
+motivating slogan for you:\n\n"Conquer the Mountain Within: Your Fear is 
+Just a Stepping Stone to New Heights!"'}, {'role': 'user', 'content': 'Now 
+translate that slogan into German'}, {'role': 'assistant', 'content': 'Of course! 
+The German translation of "Conquer the Mountain Within: Your Fear is Just a Stepping 
+Stone to New Heights!" would be:\n\n"Berge Innerhalb von Dir besiegen: Deine Angst 
+\ist nur ein Stufenstein zu neuen Gipfeln!"'}, {'role': 'user', 'content': 'Now 
+translate to Latin'}, {'role': 'assistant', 'content': 'In Latin, the phrase could 
+be:\n\n"Montes Intus Vincere: Timor Tuum Nec Nisi Gradus Ad Novos Culmines!"'}]
 
 ```
 
