@@ -1,3 +1,5 @@
+.vscode
+local-test.py
 # Personal testing sripts
 /ignore
 open.py

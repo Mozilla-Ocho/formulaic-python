@@ -255,3 +255,19 @@ That's the gist! You've parsed your first Formula and sent it off to a local lan
 
 You can see [the entire script](https://github.com/Mozilla-Ocho/formulaic-python/blob/main/examples/quickstart.py) we just produced here. 
 
+
+## Contributions
+
+### Getting started
+
+We love contributions! Small or large, contributions make open source amazing. 
+In order to help streamline efforts please consider the following:
+- If you're looking to make a change to the library, please open an issue first to discuss the change you'd like to make. 
+
+### Pull Requests
+- Please fork the repository and create a new branch for your feature or fix. 
+- Please make sure your code is formatted to PEP8 standards
+- Please make sure your code passes the tests. 
+- Please update the README.md with details of changes to the interface, this includes new environment variables, exposed ports, useful file locations, and container parameters. 
+- Please add any new examples or tests as needed. 
+- Please open a pull request. 

@@ -1,9 +1,9 @@
-
 import json, sys
 from string import Template
+import requests
 
 
-''' 
+""" 
 Formula Class for enabling the opening, parsing of Formulas
 Gets them ready to send to various LLMs
 
@@ -33,106 +33,84 @@ Formula.messages generates
 
 
 
-'''
+"""
 
 
 # Helpers
 # open and read JSON file passed by CLI, return dict
 def load_formula(file_name):
     try:
-        
+
         file_name = sys.argv[1] if len(sys.argv) > 1 else file_name
         with open(file_name, "r") as my_file:
             contents = my_file.read()
-            return json.loads(contents) # load the JSON Formula into a dict
+            return json.loads(contents)  # load the JSON Formula into a dict
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 
 
-# saves our output file to disk 
+# saves our output file to disk
 # filename is the full file path to disk plus extension
-def save_output(output, filename='export.txt'):
+def save_output(output, filename="export.txt"):
     # convert dict to json string
     json_str = json.dumps(output, indent=4)
 
-    with open(filename, 'w') as f:
+    with open(filename, "w") as f:
         f.write(json_str)
-    
 
 
 class Formula:
-    # blank Formula for embedded publishing in apps
-    default_formula_json = {
-        'name': '',
-        'description': '',
-        'created_at': '',
-        'updated_at': '',
-        'author': '',
-        'source': '',
-        'license': {'name': '','canonical_link': ''},
-        'script': {
-            'model': {'id': '', 'name': '', 'vendor': '', 'provider': ''},
-            'sequences': [],
-            'variables': {}
-        }
-    }
 
-    
-    def __init__(self, formula_json=None): 
-        # formula_json is actually a dict. CONSIDER RENAMING!
-        # Use the default_formula_json template if none is given
-        if formula_json is None:
-            formula_json = Formula.default_formula_json        
-        
-        # store the json as a hack for republishing, to be implemented later
-        self.formula_json = formula_json
+    def __init__(self, openClient, script=None, options=None):
+        self.openClient = openClient
+        if script is not None:
+            self._script = script
+        if options is not None:
+            self.options = options
+        else:
+            self.options = {baseURL: "https://formulaic.app/api/", apiKey: None}
 
-        # individual properties
-        self.name = formula_json.get('name', '')
-        self.description = formula_json.get('description', '')
-        self.created = formula_json.get('created_at', '')
-        self.updated = formula_json.get('updated_at', '')
-        self.author = formula_json.get('author', '')  # ['author']
-        self.source = formula_json.get ('source') #['source']
-        self.license = formula_json.get('license', {}) #['license']['canonical_link']
-        self.model = formula_json.get('script', {}).get('model', {}) #['script']['model']
-        # shortcut because model_id seems useful
-        self.model_id = self.model.get('id', '')  #['script']['model']['id']
-        self.sequences = formula_json.get('script', {}).get('sequences', []) #['script']['sequences']
+    @property
+    def script(self):
+        return self._script
 
+    @script.setter
+    def script(self, value):
+        if value is not None:
+            self._script = value
 
-        
-        # full variables with all attributes
-        self.variables = formula_json.get('script', {}).get('variables', {}) #['script']['variables']
+    def get_formula(self, id):
+        headers = {"Accept": "*/*", "Authorization": "Bearer " + self.options["apiKey"]}
+        url = self.options["baseURL"] + "recipes/" + id + "/scripts"
+        response = requests.get(url, headers=headers)
+        value = response.json()
+        print(value)
+        self._script = value
+        return value
 
-        # storedefault variables in simple format. Useful for testing locally
-        self.default_values = Formula.simple_variables(self.variables)
-
-        # auto-render the default values or fail when they're called before rendering?
-        #self.prompts = Formula.render(self.sequences, self.defaults)
-
-
-    @staticmethod 
+    @staticmethod
     def simple_variables(data):
         # reformat our variables into k/v pairs for use in the template
-        simple_data = {variable['name']: variable['value'] for variable in data}
+        simple_data = {variable["name"]: variable["value"] for variable in data}
         return simple_data
-    
-    #renders prompts
-    def render(self, simple_data=None):    
-        
+
+    # renders prompts
+    def render(self, simple_data=None):
         # if we don't get new values, use the defaults
         if simple_data is None:
-            simple_data = self.default_values
+            simple_data = self.script.get("script").get("variables")
 
         rendered = []
 
-        # render our template, substituting the values  
-
-        for i in self.sequences:
+        # render our template, substituting the values
+        script = self.script.get("script")
+        sequences = script.get("sequences")
+        for i in sequences:
             # each prompt in the sequence
+            print(i)
+
             for prompt in i:
-        
+
                 # turn it into a FormulaTemplate and then substitute the values
                 prompt_template = FormulaTemplate(prompt["text"])
 
@@ -140,11 +118,13 @@ class Formula:
                     rendered.append(prompt_template.substitute(simple_data))
 
                 except:
-                    print(f"Templating error, the JSON you submitted has incorrect keys.")
-        
-        #think about whether we want to return prompts or set a property
-        self.prompts = rendered
-        #return rendered
+                    print(
+                        f"Templating error, the JSON you submitted has incorrect keys."
+                    )
+
+        # think about whether we want to return prompts or set a property
+        self.script["script"]["sequences"] = rendered
+        # return rendered
 
     # Convenient for testing user variable inputs in CLI
     # Loops over Formula.variables simple object
@@ -153,34 +133,30 @@ class Formula:
     def inputs(self, variables=None):
 
         if variables is None:
-            variables = self.variables 
+            variables = self.variables
 
         new_inputs = variables
 
         for i in variables:
-            answer = input(i['description'] + "\n> ")
+            answer = input(i["description"] + "\n> ")
 
             # no validation here...
-            i['value'] = answer
+            i["value"] = answer
 
         new_inputs = Formula.simple_variables(new_inputs)
 
         return new_inputs
 
 
-
-        
 class FormulaTemplate(Template):
-    delimiter = '{{{'
-    idpattern = r'\w+'
-    
-    pattern = r'''
+    delimiter = "{{{"
+    idpattern = r"\w+"
+
+    pattern = r"""
     \{{3}                           # matches 3 opening braces 
     (?:                             
       (?P<named>\w+)\}{3}           # a-z, A-Z, 0-9 and _ allowed
       |                             # OR
       (?P<invalid>.+?)\}{3}         # invalid 
     )
-    '''
-
-
+    """
