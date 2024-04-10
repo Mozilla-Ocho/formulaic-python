@@ -32,7 +32,7 @@ print(f"\nMy starting prompts: {json.dumps(formulaic.script, indent=2)}")
 
 # our new variables here.
 data = {
-    "value": "I'm scared of heights and climbing a mountain",
+    "value": "What is {{{name}}}?",
     "name": "German",
 }
 

@@ -1,44 +1,12 @@
-import json, sys
+import json
+import sys
 from string import Template
 import requests
+from openclient import OpenClient
 
 
-""" 
-Formula Class for enabling the opening, parsing of Formulas
-Gets them ready to send to various LLMs
-
-This will grow to support system prompts, few shot 
-examples, etc. 
-
-Formula Class works with OpenClient, which is a wrapper on top of 
-OpenAI and can send our Formula prompts to many LLMs
-
-:render(): Formula method for rendering usable prompts by substituting variable values
-into the template placeholders
-
-:inputs(): Helpful CLI tool for testing only. Prompts user for new variables on command line
-
-FormulaTemplate Class - extends Template for basic template rendering of curly
-brace tenplates. Consider changing format to support either mustache or 
-jinja formats
-
-Helper functions Also contains helper functions for opening json Formula files from disc
-And saving processed outputs back to disc
-:load_formula(): top-level function to load a Formula from disk.
-arg is path+filename (or just filename if in same directory)
-:save_output(): saves message output to disk. Expects 2 args
-- output: a dictionary reprenting the message thread. This is natively what 
-Formula.messages generates
-- filepath+filename (or just filename if saving to same directory)
-
-
-
-"""
-
-
-# Helpers
-# open and read JSON file passed by CLI, return dict
 def load_formula(file_name):
+    """Load a JSON Formula from disk"""
     try:
 
         file_name = sys.argv[1] if len(sys.argv) > 1 else file_name
@@ -49,10 +17,8 @@ def load_formula(file_name):
         print(f"An unexpected error occurred: {e}")
 
 
-# saves our output file to disk
-# filename is the full file path to disk plus extension
 def save_output(output, filename="export.txt"):
-    # convert dict to json string
+    """Save output to disk as JSON"""
     json_str = json.dumps(output, indent=4)
 
     with open(filename, "w") as f:
@@ -60,42 +26,46 @@ def save_output(output, filename="export.txt"):
 
 
 class Formula:
+    """Formula Class for enabling the opening, parsing of Formulas"""
 
-    def __init__(self, openClient, script=None, options=None):
-        self.openClient = openClient
+    def __name__(self):
+        return "Formulaic"
+
+    def __init__(self, open_client, script=None, options=None, model=None):
+        self.open_client = OpenClient(open_client, self, model)
         if script is not None:
-            self._script = script
+            self.script = script
+        self.model = model
         if options is not None:
             self.options = options
         else:
-            self.options = {baseURL: "https://formulaic.app/api/", apiKey: None}
+            self.options = {"base_URL": "https://formulaic.app/api/", "api_key": None}
 
-    @property
-    def script(self):
-        return self._script
-
-    @script.setter
-    def script(self, value):
-        if value is not None:
-            self._script = value
-
-    def get_formula(self, id):
-        headers = {"Accept": "*/*", "Authorization": "Bearer " + self.options["apiKey"]}
-        url = self.options["baseURL"] + "recipes/" + id + "/scripts"
-        response = requests.get(url, headers=headers)
+    def get_formula(self, formula_id):
+        """Get a Formula from the Formulaic API"""
+        headers = {
+            "Accept": "*/*",
+            "Authorization": "Bearer " + self.options["api_key"],
+        }
+        url = self.options["base_URL"] + "recipes/" + formula_id + "/scripts"
+        response = requests.get(url, headers=headers, timeout=10)
         value = response.json()
-        print(value)
-        self._script = value
+        self.script = value
         return value
+
+    def run(self):
+        """Run the Formula"""
+        self.open_client.run(model=self.model)
 
     @staticmethod
     def simple_variables(data):
-        # reformat our variables into k/v pairs for use in the template
+        """reformat our variables into k/v pairs for use in the template"""
         simple_data = {variable["name"]: variable["value"] for variable in data}
         return simple_data
 
     # renders prompts
     def render(self, simple_data=None):
+        """Render the Formula prompts with the new values"""
         # if we don't get new values, use the defaults
         if simple_data is None:
             simple_data = self.script.get("script").get("variables")
@@ -117,35 +87,14 @@ class Formula:
                 try:
                     rendered.append(prompt_template.substitute(simple_data))
 
-                except:
+                except KeyError:
                     print(
-                        f"Templating error, the JSON you submitted has incorrect keys."
+                        "Templating error, the JSON you submitted has incorrect keys."
                     )
 
         # think about whether we want to return prompts or set a property
         self.script["script"]["sequences"] = rendered
         # return rendered
-
-    # Convenient for testing user variable inputs in CLI
-    # Loops over Formula.variables simple object
-    # creates a new
-
-    def inputs(self, variables=None):
-
-        if variables is None:
-            variables = self.variables
-
-        new_inputs = variables
-
-        for i in variables:
-            answer = input(i["description"] + "\n> ")
-
-            # no validation here...
-            i["value"] = answer
-
-        new_inputs = Formula.simple_variables(new_inputs)
-
-        return new_inputs
 
 
 class FormulaTemplate(Template):
