@@ -123,11 +123,15 @@ class Formula:
 
         return self.messages
 
-    def chat(self, printable=False):
+    def chat(
+        self,
+        printable=False,
+        variables=None,
+    ):
         """Start an interactable chat session on command line"""
         self.messages = []
 
-        self.run(printable)
+        self.run(variables=variables, printable=printable)
         next_message = "a"
         while next_message:
             next_message = input("> ")
