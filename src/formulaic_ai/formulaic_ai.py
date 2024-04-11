@@ -32,7 +32,6 @@ class Formula:
         return "Formulaic"
 
     def __init__(self, open_client, script=None, options=None, model=None):
-        print(model)
         self.open_client = OpenClient(open_client, self, model)
         if script is not None:
             self.script = script
@@ -41,6 +40,7 @@ class Formula:
             self.options = options
         else:
             self.options = {"base_URL": "https://formulaic.app/api/", "api_key": None}
+        self.rendered_prompts = None
 
     def get_formula(self, formula_id):
         """Get a Formula from the Formulaic API"""
@@ -78,35 +78,13 @@ class Formula:
         sequences = script.get("sequences")
         for i in sequences:
             # each prompt in the sequence
-            print(i)
-
             for prompt in i:
-
-                # turn it into a FormulaTemplate and then substitute the values
-                prompt_template = FormulaTemplate(prompt["text"])
-
-                try:
-                    rendered.append(prompt_template.substitute(simple_data))
-
-                except KeyError:
-                    print(
-                        "Templating error, the JSON you submitted has incorrect keys."
-                    )
-
+                temp_prompt = prompt["text"]
+                for var in simple_data:
+                    name = var["name"]
+                    value = var["value"]
+                    temp_prompt = temp_prompt.replace("{{{" + name + "}}}", value)
+                rendered.append(temp_prompt)
         # think about whether we want to return prompts or set a property
-        self.script["script"]["sequences"] = rendered
-        # return rendered
-
-
-class FormulaTemplate(Template):
-    delimiter = "{{{"
-    idpattern = r"\w+"
-
-    pattern = r"""
-    \{{3}                           # matches 3 opening braces 
-    (?:                             
-      (?P<named>\w+)\}{3}           # a-z, A-Z, 0-9 and _ allowed
-      |                             # OR
-      (?P<invalid>.+?)\}{3}         # invalid 
-    )
-    """
+        self.rendered_prompts = rendered
+        return rendered

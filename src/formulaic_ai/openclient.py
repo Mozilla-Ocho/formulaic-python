@@ -9,7 +9,6 @@ class OpenClient:
 
     def __init__(self, client, formula, model):
         self.formula = formula
-        self.responses = []
         self.messages = []
         print("model", model)
         self.model = model
@@ -27,7 +26,6 @@ class OpenClient:
         # get clean answer, append it to messages, print
         answer = completion.choices[0].message.content
         self.messages.append({"role": "assistant", "content": answer})
-        self.responses.append(answer)
 
         if printable:
             print(f"Assistant: {answer}\n")
@@ -39,19 +37,21 @@ class OpenClient:
         printable=True,
     ):
         """Run the prompts and responses."""
-        self.responses = []
+        self.messages = []
         prompts = self.formula.script.get("script").get("sequences")
-        completion = None
+
         for p in prompts:
-            completion = self.send_message(p, printable)
+            self.send_message(p, printable)
 
         if printable:
-            print(completion.model_dump())
+            print(self.messages)
 
-        return self.responses
+        return self.messages
 
     def chat(self, printable=False):
         """Start an interactable chat session on command line"""
+        self.messages = []
+
         self.run(printable)
         next_message = "a"
         while next_message:
@@ -63,7 +63,6 @@ class OpenClient:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.responses.clear()
         self.messages.clear()
         # self.prompts.clear()
         print("Exiting OpenClient, clearing state.")
