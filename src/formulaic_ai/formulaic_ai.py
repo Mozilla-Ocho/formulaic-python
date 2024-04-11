@@ -1,8 +1,8 @@
 import json
 import sys
+from copy import deepcopy
 from string import Template
 import requests
-from openclient import OpenClient
 
 
 def load_formula(file_name):
@@ -32,7 +32,7 @@ class Formula:
         return "Formulaic"
 
     def __init__(self, open_client, script=None, options=None, model=None):
-        self.open_client = OpenClient(open_client, self, model)
+        self.open_client = open_client
         if script is not None:
             self.script = script
         self.model = model
@@ -40,7 +40,9 @@ class Formula:
             self.options = options
         else:
             self.options = {"base_URL": "https://formulaic.app/api/", "api_key": None}
-        self.rendered_prompts = None
+        self.rendered = None
+
+        self.messages = []
 
     def get_formula(self, formula_id):
         """Get a Formula from the Formulaic API"""
@@ -53,10 +55,6 @@ class Formula:
         value = response.json()
         self.script = value
         return value
-
-    def run(self):
-        """Run the Formula"""
-        self.open_client.run()
 
     @staticmethod
     def simple_variables(data):
@@ -86,5 +84,60 @@ class Formula:
                     temp_prompt = temp_prompt.replace("{{{" + name + "}}}", value)
                 rendered.append(temp_prompt)
         # think about whether we want to return prompts or set a property
-        self.rendered_prompts = rendered
-        return rendered
+        rendered_formula = deepcopy(self.script)
+        rendered_formula["script"]["sequences"] = rendered
+        print(rendered_formula)
+        return rendered_formula
+
+    def send_message(self, message, printable=True):
+        """append to messages, print, send it."""
+        self.messages.append({"role": "user", "content": message})
+        print("self.messages " + str(self.messages))
+        completion = self.open_client.chat.completions.create(
+            model=self.model,
+            messages=self.messages,
+        )
+
+        # get clean answer, append it to messages, print
+        answer = completion.choices[0].message.content
+        self.messages.append({"role": "assistant", "content": answer})
+
+        if printable:
+            print(f"Assistant: {answer}\n")
+
+        return completion
+
+    def run(
+        self,
+        printable=True,
+        variables=None,
+    ):
+        """Run the prompts and responses."""
+        self.messages = []
+        rendered_formula = self.render(variables)
+        for p in rendered_formula["script"]["sequences"]:
+            self.send_message(p, printable)
+
+        if printable:
+            print(self.messages)
+
+        return self.messages
+
+    def chat(self, printable=False):
+        """Start an interactable chat session on command line"""
+        self.messages = []
+
+        self.run(printable)
+        next_message = "a"
+        while next_message:
+            next_message = input("> ")
+            if next_message:
+                self.send_message(next_message, printable)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.messages.clear()
+        # self.prompts.clear()
+        print("Exiting OpenClient, clearing state.")
