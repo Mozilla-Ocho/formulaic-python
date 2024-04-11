@@ -11,18 +11,21 @@ class OpenClient:
         self.formula = formula
         self.responses = []
         self.messages = []
+        print("model", model)
         self.model = model
         self.client = client
 
-    def send_message(self, message, printable, direct=False):
+    def send_message(self, message, printable=True, direct=False):
         """append to messages, print, send it."""
         self.messages.append({"role": "user", "content": message})
-        if printable and direct is False:
-            print(f"User: {message}\n")
-
+        print(f"Messages: {self.messages}\n")
+        print("Model: ", self.model)
+        print(type(self.messages))
         completion = self.client.chat.completions.create(
-            model=self.model, messages=self.messages
+            model=self.model,
+            messages=self.messages,
         )
+        print(f"completion: {completion}\n")
         # get clean answer, append it to messages, print
         answer = completion.choices[0].message.content
         self.messages.append({"role": "assistant", "content": answer})
@@ -31,12 +34,11 @@ class OpenClient:
         if printable:
             print(f"Assistant: {answer}\n")
 
-    def run(self, printable=True, model=None):
+    def run(
+        self,
+        printable=True,
+    ):
         """Run the prompts and responses."""
-        if self.model is None and model is None:
-            raise ValueError("Model must be set to run.")
-
-        self.model = model
         prompts = self.formula.script.get("script").get("sequences")
         for p in prompts:
             self.send_message(p, printable)
@@ -56,5 +58,5 @@ class OpenClient:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.responses.clear()
         self.messages.clear()
-        self.prompts.clear()
+        # self.prompts.clear()
         print("Exiting OpenClient, clearing state.")

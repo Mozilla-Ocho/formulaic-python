@@ -32,6 +32,7 @@ class Formula:
         return "Formulaic"
 
     def __init__(self, open_client, script=None, options=None, model=None):
+        print(model)
         self.open_client = OpenClient(open_client, self, model)
         if script is not None:
             self.script = script
@@ -55,7 +56,7 @@ class Formula:
 
     def run(self):
         """Run the Formula"""
-        self.open_client.run(model=self.model)
+        self.open_client.run()
 
     @staticmethod
     def simple_variables(data):
