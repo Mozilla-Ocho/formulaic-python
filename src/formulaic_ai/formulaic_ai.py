@@ -67,14 +67,24 @@ class Formulaic:
         }
     }
 
-    
-    def __init__(self, formula_json=None): 
+
+    def __init__(self, api_key=None, formula_json=None, options=None): 
         # formula_json is actually a dict. CONSIDER RENAMING!
         # Use the default_formula_json template if none is given
         # do we need to deepcopy? 
 
         if formula_json is None:
            formula_json = copy.deepcopy(Formulaic.default_formula_json)
+
+        if api_key is not None:
+            self.api_key = api_key
+
+        # set default options to include base_url
+        self.options = {"base_url": "https://formulaic.app/api/"}
+        
+        # add user options, including overriding base_url. api_key expected
+        if options is not None:
+            self.options.update(options)
 
         self.script = formula_json 
 
@@ -115,12 +125,12 @@ class Formulaic:
         # auto-render the default values or fail when they're called before rendering?
         #self.prompts = Formula.render(self.sequences, self.defaults)
 
-    def get(self, formula_id, api_key, base_url="https://formulaic.app/api/"):
+    def get_formula(self, formula_id):
         """Get a Formula from the Formulaic API"""
-        url = base_url + "recipes/" + formula_id + "/scripts"
+        url = self.options['base_url'] + "recipes/" + formula_id + "/scripts"
         headers = {
             "Accept": "*/*",
-            "Authorization": "Bearer " + api_key,
+            "Authorization": "Bearer " + self.api_key,
         }
         
         response = requests.get(url, headers=headers, timeout=10)

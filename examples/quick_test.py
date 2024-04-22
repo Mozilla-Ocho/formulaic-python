@@ -24,12 +24,9 @@ FORMULAIC_API_KEY = "your_personal_key"
 
 
 
+my_formula = Formulaic(FORMULAIC_API_KEY)
 
-my_formula = Formulaic()
-
-my_formula.get("2968bf58-a231-46ff-99de-923198c3864e", FORMULAIC_API_KEY)
-
-
+my_formula.get_formula("2968bf58-a231-46ff-99de-923198c3864e")
 
 
  
@@ -58,7 +55,6 @@ print (my_formula.prompts)
 print (my_formula.script)
 
 exit()
-
 
 
 import openai
