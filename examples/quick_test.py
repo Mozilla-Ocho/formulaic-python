@@ -10,7 +10,7 @@ anyscale, llamafile, or any other provider with minor code tweaks.
 
 #import os
 #from dotenv import load_dotenv
-from formulaic_ai import Formula, get_formula 
+from formulaic_ai import Formulaic 
 import openai
 
 
@@ -22,17 +22,46 @@ import openai
 
 FORMULAIC_API_KEY = "your_personal_key"
 
- 
-my_formula = Formula(get_formula("2968bf58-a231-46ff-99de-923198c3864e", FORMULAIC_API_KEY))
+
+
+
+my_formula = Formulaic()
+
+my_formula.get("2968bf58-a231-46ff-99de-923198c3864e", FORMULAIC_API_KEY)
+
 
 
 
  
 # add new values for the variables here.
+print (my_formula.script)
+
+
+
 new_variables = {"occasion": "I'm scared of heights and climbing a mountain", 'language': 'German'}
 my_formula.render(new_variables)
 
-# print (my_formula.prompts)
+print (my_formula.prompts)
+
+
+new_variables = {"occasion": "new haircut", 'language': 'Japanese'}
+my_formula.render(new_variables)
+
+print (my_formula.prompts)
+
+
+new_variables = {"occasion": "My birthday", 'language': 'Greek'}
+my_formula.render(new_variables)
+
+print (my_formula.prompts)
+
+print (my_formula.script)
+
+exit()
+
+
+
+import openai
 
 client = openai.OpenAI(
     base_url="http://localhost:8080/v1", # "http://<Your api-server IP>:port"
