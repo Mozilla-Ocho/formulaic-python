@@ -50,20 +50,7 @@ def load_formula(file_name):
         print(f"An unexpected error occurred: {e}")
 
 
-def get_formula(formula_id, api_key, base_url="https://formulaic.app/api/"):
-    """Get a Formula from the Formulaic API"""
-    url = base_url + "recipes/" + formula_id + "/scripts"
-    headers = {
-        "Accept": "*/*",
-        "Authorization": "Bearer " + api_key,
-    }
-    
-    response = requests.get(url, headers=headers, timeout=10)
-    formula_dict = response.json()
-    return formula_dict
-
-
-class Formula:
+class Formulaic:
     # blank Formula for embedded publishing in apps
     default_formula_json = {
         'name': '',
@@ -87,9 +74,7 @@ class Formula:
         # do we need to deepcopy? 
 
         if formula_json is None:
-            formula_json = Formula.default_formula_json
-        #   formula_json = copy.deepcopy(Formula.default_formula_json)
- 
+           formula_json = copy.deepcopy(Formulaic.default_formula_json)
 
         self.script = formula_json 
 
@@ -105,6 +90,7 @@ class Formula:
             #self.script = formula_json
 
         # individual properties
+
         self.name = formula_json.get('name', '')
         self.description = formula_json.get('description', '')
         self.created = formula_json.get('created_at', '')
@@ -113,6 +99,7 @@ class Formula:
         self.source = formula_json.get ('source') #['source']
         self.license = formula_json.get('license', {}) #['license']['canonical_link']
         self.model = formula_json.get('script', {}).get('model', {}) #['script']['model']
+        
         # shortcut because model_id seems useful
         self.model_id = self.model.get('id', '')  #['script']['model']['id']
         self.sequences = formula_json.get('script', {}).get('sequences', []) #['script']['sequences']
@@ -123,10 +110,24 @@ class Formula:
         self.variables = formula_json.get('script', {}).get('variables', {}) #['script']['variables']
 
         # storedefault variables in simple format. Useful for testing locally
-        self.default_values = Formula.simple_variables(self.variables)
+        self.default_values = Formulaic.simple_variables(self.variables)
 
         # auto-render the default values or fail when they're called before rendering?
         #self.prompts = Formula.render(self.sequences, self.defaults)
+
+    def get(self, formula_id, api_key, base_url="https://formulaic.app/api/"):
+        """Get a Formula from the Formulaic API"""
+        url = base_url + "recipes/" + formula_id + "/scripts"
+        headers = {
+            "Accept": "*/*",
+            "Authorization": "Bearer " + api_key,
+        }
+        
+        response = requests.get(url, headers=headers, timeout=10)
+        formula_dict = response.json()
+        self.script = formula_dict
+        return formula_dict
+
 
 
     @staticmethod 
