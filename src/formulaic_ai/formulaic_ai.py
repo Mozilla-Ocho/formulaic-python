@@ -1,6 +1,7 @@
 
-import json, sys
+import json, sys, copy, requests
 from string import Template
+
 
 
 ''' 
@@ -16,7 +17,6 @@ OpenAI and can send our Formula prompts to many LLMs
 :render(): Formula method for rendering usable prompts by substituting variable values
 into the template placeholders
 
-:inputs(): Helpful CLI tool for testing only. Prompts user for new variables on command line
 
 FormulaTemplate Class - extends Template for basic template rendering of curly
 brace tenplates. Consider changing format to support either mustache or 
@@ -39,6 +39,7 @@ Formula.messages generates
 # Helpers
 # open and read JSON file passed by CLI, return dict
 def load_formula(file_name):
+    """Load a JSON Formula from disk"""
     try:
         
         file_name = sys.argv[1] if len(sys.argv) > 1 else file_name
@@ -49,15 +50,17 @@ def load_formula(file_name):
         print(f"An unexpected error occurred: {e}")
 
 
-# saves our output file to disk 
-# filename is the full file path to disk plus extension
-def save_output(output, filename='export.txt'):
-    # convert dict to json string
-    json_str = json.dumps(output, indent=4)
-
-    with open(filename, 'w') as f:
-        f.write(json_str)
+def get_formula(formula_id, api_key, base_url="https://formulaic.app/api/"):
+    """Get a Formula from the Formulaic API"""
+    url = base_url + "recipes/" + formula_id + "/scripts"
+    headers = {
+        "Accept": "*/*",
+        "Authorization": "Bearer " + api_key,
+    }
     
+    response = requests.get(url, headers=headers, timeout=10)
+    formula_dict = response.json()
+    return formula_dict
 
 
 class Formula:
@@ -81,11 +84,25 @@ class Formula:
     def __init__(self, formula_json=None): 
         # formula_json is actually a dict. CONSIDER RENAMING!
         # Use the default_formula_json template if none is given
+        # do we need to deepcopy? 
+
         if formula_json is None:
-            formula_json = Formula.default_formula_json        
-        
-        # store the json as a hack for republishing, to be implemented later
-        self.formula_json = formula_json
+            formula_json = Formula.default_formula_json
+        #   formula_json = copy.deepcopy(Formula.default_formula_json)
+ 
+
+        self.script = formula_json 
+
+     
+    @property
+    def script(self):
+        return self._script
+
+    @script.setter
+    def script(self, formula_json):
+        if formula_json is not None:
+            self._script = formula_json 
+            #self.script = formula_json
 
         # individual properties
         self.name = formula_json.get('name', '')
@@ -142,34 +159,14 @@ class Formula:
                 except:
                     print(f"Templating error, the JSON you submitted has incorrect keys.")
         
+        #consider format here -- do we use OpenAI format for messages?
         #think about whether we want to return prompts or set a property
         self.prompts = rendered
-        #return rendered
+  
 
-    # Convenient for testing user variable inputs in CLI
-    # Loops over Formula.variables simple object
-    # creates a new
+ 
 
-    def inputs(self, variables=None):
-
-        if variables is None:
-            variables = self.variables 
-
-        new_inputs = variables
-
-        for i in variables:
-            answer = input(i['description'] + "\n> ")
-
-            # no validation here...
-            i['value'] = answer
-
-        new_inputs = Formula.simple_variables(new_inputs)
-
-        return new_inputs
-
-
-
-        
+# This allows us to extend templating or replace w/ Jinja2        
 class FormulaTemplate(Template):
     delimiter = '{{{'
     idpattern = r'\w+'

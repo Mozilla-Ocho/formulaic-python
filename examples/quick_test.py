@@ -1,0 +1,50 @@
+""" Get started very quickly, create a .env file in this directory with the following contents:
+OPENAI_API_KEY=your_openai_api_key
+OPENAI_BASE_URL=https://api.openai.com/v1
+FORMULAIC_API_KEY=your_formulaic_api_key
+
+Or use any OpenAI compatiable service that can use the openai python client.
+Formulaic does not depend on any specific inference provider, for example you can also use 
+anyscale, llamafile, or any other provider with minor code tweaks.
+"""
+
+#import os
+#from dotenv import load_dotenv
+from formulaic_ai import Formula, get_formula 
+import openai
+
+
+#load_dotenv()
+#OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+#OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL")
+#FORMULAIC_API_KEY = os.getenv("FORMULAIC_API_KEY")
+
+
+FORMULAIC_API_KEY = "your_personal_key"
+
+ 
+my_formula = Formula(get_formula("2968bf58-a231-46ff-99de-923198c3864e", FORMULAIC_API_KEY))
+
+
+
+ 
+# add new values for the variables here.
+new_variables = {"occasion": "I'm scared of heights and climbing a mountain", 'language': 'German'}
+my_formula.render(new_variables)
+
+# print (my_formula.prompts)
+
+client = openai.OpenAI(
+    base_url="http://localhost:8080/v1", # "http://<Your api-server IP>:port"
+    api_key = "sk-no-key-required"
+)
+
+completion = client.chat.completions.create(
+model="gpt-3.5-turbo",
+messages=[
+    
+    {"role": "user", "content": my_formula.prompts[0]},
+]
+)
+
+print(completion.choices[0].message.content)
