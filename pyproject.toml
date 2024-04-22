@@ -4,14 +4,15 @@ build-backend = "hatchling.build"
 
 [project]
 name = "formulaic-ai"
-version = "0.1.0.4"
-description = "The official Formulaic python library for working with generative AI prompts."
+version = "0.1.0.5"
+description = "The official Formulaic Python library"
 authors = [
-    {name = "Javaun Moradi", email = "formulaic@mozilla.com"}
+    {name = "Javaun Moradi", email = "formulaic@mozilla.com"},
+    {name = "Gabriel Habayeb", email = "formulaic@mozilla.com"}
     ]
 license = "Apache-2.0"
 readme = "README.md"
-keywords = ["prompt engineering", "prompt scripts" , "LLM", "language models", "generative ai", "openai", "api", ]
+keywords = ["prompt engineering", "prompt scripts" , "LLM", "language models", "llama", "mistral", "generative ai", "openai", "api", ]
 classifiers = [
     "Development Status :: 1 - Planning",
     "Intended Audience :: Developers",
@@ -26,7 +27,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "openai>=1.0"
+    "requests>=2.31.0"
 ]
 requires-python = ">= 3.8"
 
