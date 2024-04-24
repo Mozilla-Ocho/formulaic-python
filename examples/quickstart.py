@@ -1,9 +1,12 @@
 """ 
-This example works with any OpenAI API compatible Python client.
+This example works with any LLM inference API that uses the OpenAI format and
+OpenAI Python library
 
-For this demo we've chosen llamafile. You may substitue in another provider
-such as Anyscale or OpenAI by changing the values of endpoint_url and 
-inference_api_key.
+For this demo we've chosen llamafile, which is an LLM that runs on your local 
+machineand includes a locally running OpenAI-compatible API endpoint. 
+
+You may substitue in another providersuch as Anyscale or OpenAI by changing 
+the values of endpoint_url and inference_api_key.
 
 """
 
