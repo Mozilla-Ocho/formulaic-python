@@ -3,7 +3,7 @@ This example works with any LLM inference API that uses the OpenAI format and
 OpenAI Python library
 
 For this demo we've chosen llamafile, which is an LLM that runs on your local 
-machineand includes a locally running OpenAI-compatible API endpoint. 
+machine and includes a locally running OpenAI-compatible API endpoint. 
 
 You may substitue in another providersuch as Anyscale or OpenAI by changing 
 the values of endpoint_url and inference_api_key.
@@ -59,6 +59,6 @@ for p in formula.prompts:
     messages=messages
     )
     # print the user prompt we sent
-    print(f"User: {p}\n")
+    print(f"\nUser: {p}")
     # print the Assistant's response
-    print(completion.choices[0].message.content)
+    print(f"\nAssistant: {completion.choices[0].message.content}")
