@@ -1,43 +1,61 @@
-from formulaic_ai import Formula, load_formula, OpenClient
- 
+""" 
+This example works with any OpenAI API compatible Python client.
+
+For this demo we've chosen llamafile. You may substitue in another provider
+such as Anyscale or OpenAI by changing the values of endpoint_url and 
+inference_api_key.
+
+"""
+
+from formulaic_ai import Formulaic 
+import openai
 
 
-model_config = { "llamafile" :  {"url" : "http://localhost:8080/v1",
-                                 "key":"sk-no-key-required", 
-                                 "name": "LLaMA_CPP"}, 
-                  "OpenAI" :    {"url" :  "https://api.openai.com/v1",
-                                 "key": "OPENAI_KEY_GOES_HERE", 
-                                 "name": "gpt-3.5-turbo"},
-                  "mistral7b" : {"url" : "https://api.endpoints.anyscale.com/v1",
-                                 "key": "ANYSCALE_KEY_GOES_HERE", 
-                                 "name": "mistralai/Mistral-7B-Instruct-v0.1"}  
-                   
-}
-
-# load our Formula, print the Formula name: description
-my_formula = Formula(load_formula("motivator.json")) 
-print(f"{my_formula.name}: {my_formula.description}")
+formulaic_api_key = "your_personal_key"
+endpoint_url = "http://localhost:8080/v1" # default for llamafile
+inference_api_key = "sk-no-key-required"  # substitute if using another service
 
 
-# render prompts. 
-my_formula.render()
-print(f"\nMy starting prompts: {my_formula.prompts}")
+formula = Formulaic(formulaic_api_key)
+
+formula.get_formula("2968bf58-a231-46ff-99de-923198c3864e")
+
+# print the entire Formula script
+print (formula.script)
 
 
-#our new variables here. 
-data = {"occasion": "I'm scared of heights and climbing a mountain", 'language': 'German'}
+# new values for the template variables
+new_variables = {"occasion": "I'm scared of heights!", 'language': 'German'}
+
+# render prompts by sustituting the new values
+formula.render(new_variables)
+
+# print the prompts that contain our new values
+print (formula.prompts)
+
+# change values, render, and print the prompts
+new_variables = {"occasion": "It's my birthday!", 'language': 'Greek'}
+formula.render(new_variables)
+print (formula.prompts)
 
 
-# render and print our prompts
-my_formula.render(data)
-print(f"\nMy new prompts: {my_formula.prompts}")
+# Send our latest prompts to an OpenAI compatible endpoint
 
+# create an OpenAI client
+client = openai.OpenAI(
+    base_url="http://localhost:8080/v1", # "http://<Your api-server IP>:port"
+    api_key = "sk-no-key-required"
+)
+messages=[]
 
-# Create an OpenClient instance for llamafile
-with OpenClient(my_formula, model_config["llamafile"]) as client:
-
-    # start our chat. True = print to terminal
-    client.chat(True)
-    
-    # print our message log.  
-    print(client.messages)
+# iterate over the prompts and send to the model for completions
+for p in formula.prompts:
+    messages.append({"role": "user", "content": p})
+    completion = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=messages
+    )
+    # print the user prompt we sent
+    print(f"User: {p}\n")
+    # print the Assistant's response
+    print(completion.choices[0].message.content)

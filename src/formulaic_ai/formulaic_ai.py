@@ -69,10 +69,8 @@ class Formulaic:
 
 
     def __init__(self, api_key=None, formula_json=None, options=None): 
-        # formula_json is actually a dict. CONSIDER RENAMING!
-        # Use the default_formula_json template if none is given
-        # do we need to deepcopy? 
 
+        # Use the default_formula_json template if none is given
         if formula_json is None:
            formula_json = copy.deepcopy(Formulaic.default_formula_json)
 
