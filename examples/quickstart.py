@@ -46,8 +46,8 @@ print (formula.prompts)
 
 # create an OpenAI client
 client = openai.OpenAI(
-    base_url="http://localhost:8080/v1", # default for llamafile
-    api_key = "sk-no-key-required"
+    base_url = endpoint_url,  
+    api_key = inference_api_key
 )
 messages=[]
 
